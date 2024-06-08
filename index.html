@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Registration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-image: url('film.jpg.jpg');
+            background-position: center;
+            background-size:cover;
+        }
+        .container {
+            background-color: #201f1f;
+            padding: 50px;
+            margin-top: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 500px;
+        }
+        .container h1 {
+            margin-bottom: 20px;
+            color: #fcfcfc;
+        }
+        .container label {
+            display: block;
+            margin: 10px 0 5px;
+            color: #ffffff;
+        }
+        .container input[type="text"],
+        .container input[type="date"],
+        .container input[type="email"],
+        .container select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #000000;
+            border-radius: 3px;
+        }
+        .container button {
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .container button:hover {
+            background-color: #0056b3;
+        }
+        .client-list {
+            background-color: #fff;
+            padding: 50px;
+            margin-top: 20px;
+            border-radius: 0px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 500px;
+        }
+        .client-list h2 {
+            margin-bottom: 20px;
+          
+        }
+        .client-list table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .client-list table, .client-list th, .client-list td {
+            border: 1px solid #ccc;
+        }
+        .client-list th, .client-list td {
+            padding: 10px;
+            text-align: left;
+            border-radius: 50px;
+        }
+    
+    H3{
+font-size: 80px;
+font-style: oblique;
+    }
+    </style>
+</head>
+<body>
+    <H3>RNT FILM</H3>
+    <div class="container">
+        <h1> Event Registration</h1>
+        <form id="registrationForm">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="course">Event Theme:</label>
+            <select id="course" name="course" required>
+                <option value="Birthday Party">Birthday Party</option>
+                <option value="wedding">wedding</option>
+                <option value="Debut">Debut</option>
+                <option value="Anniversarry">Anniversarry</option>
+                <option value="Biology"></option>
+            </select>
+
+            <button type="submit">Register</button>
+        </form>
+    </div>
+
+    <div class="client-list">
+        <h2>Registered clients</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Date</th>
+                    <th>Email</th>
+                    <th>Theme</th>
+                </tr>
+            </thead>
+            <tbody id="studentTableBody">
+                <!-- Student rows will be added here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.getElementById('registrationForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
+
+            // Get form values
+            const name = document.getElementById('name').value;
+            const date = document.getElementById('date').value;
+            const email = document.getElementById('email').value;
+            const course = document.getElementById('course').value;
+
+            // Create student object
+            const student = {
+                name: name,
+                date: date,
+                email: email,
+                course: course
+            };
+
+            // Get existing students from localStorage
+            let students = localStorage.getItem('students');
+            if (students) {
+                students = JSON.parse(students);
+            } else {
+                students = [];
+            }
+
+            // Add new student to the array
+            students.push(student);
+
+            // Save updated students array back to localStorage
+            localStorage.setItem('students', JSON.stringify(students));
+
+            // Clear the form
+            document.getElementById('registrationForm').reset();
+
+            // Update the student list display
+            displayStudents();
+
+            alert('registered successfully!');
+        });
+
+        function displayStudents() {
+            const studentTableBody = document.getElementById('studentTableBody');
+            studentTableBody.innerHTML = '';
+
+            // Get students from localStorage
+            const students = JSON.parse(localStorage.getItem('students')) || [];
+
+            // Display each student in the table
+            students.forEach((student, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${student.name}</td>
+                    <td>${student.date}</td>
+                    <td>${student.email}</td>
+                    <td>${student.course}</td>
+                `;
+                studentTableBody.appendChild(row);
+            });
+        }
+
+        // Display students on page load
+        displayStudents();
+    </script>
+</body>
+</html>
